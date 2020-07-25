@@ -8,10 +8,12 @@ library(shiny)
 library(shinydashboard)
 library(shinythemes)
 library(shinyWidgets)
+library(htmltools)
 library(colourpicker)
 library(tidyverse)
 library(dplyr)
 library(DT)
+library(plotly)
 
 
 ## UI ##
@@ -19,12 +21,12 @@ ui <- dashboardPage(skin = "red",
     dashboardHeader(title = "ST 558 Project 3 - Zack Vaskalis", titleWidth = 350),
     ## Sidebar content
     dashboardSidebar(
-        width = 350,
+        width = 175,
         sidebarMenu(
             menuItem("Dashboard", tabName = "dashboard", icon = icon("dashboard")),
             menuItem("Information", tabName = "info", icon = icon("info-circle")),
             menuItem("Data", tabName = "data", icon = icon("database")),
-            menuItem("Widgets", tabName = "widgets", icon = icon("th")),
+            menuItem("Data Exploration", tabName = "explore", icon = icon("search")),
             menuItem("Charts", tabName = "charts", icon = icon("bar-chart-o"))
         )
     ),
@@ -33,33 +35,49 @@ ui <- dashboardPage(skin = "red",
         tabItems(
             # First tab content
             tabItem(tabName = "dashboard",
-                    h2("Dashboard content")
-            ),
-            
-            # Second tab content
-            tabItem(tabName = "widgets",
-                    h2("Widgets tab content")
-            ),
-            
-            # Third tab content
-            tabItem(tabName = "info",
+                    h2("Project 3 Dashboard"),
                     fluidRow(
                         box(
-                            background = "navy",
-                            htmlOutput("UCI_LOGO"), 
+                            tags$head(tags$style(HTML("a {color: yellow}"))),
+                            background = "navy", width = 5,
+                            htmlOutput("UCI_LOGO"),
+                            span(uiOutput("UCI_URL"), style = "color:yellow")
                         )
                     ),
                     
                     fluidRow(
                         box(
-                            title = "Title 5", width = 6, background = "red",
-                            "A box with a solid red background"
-                        ),
-                        box(
-                            title = "Title 6",width = 6, background = "black",
-                            "A box with a solid black background"
+                            tags$head(tags$style(HTML("a {color: yellow}"))),
+                            title = "Heart Failure Clinical Records Dataset", width = 5,
+                            background = "navy", 
+                            "The data for this project comes from the University of California Irvine (UCI)
+                            Machine Learning Repository. The project page can be accessed by clicking the 
+                            following link: ", span(uiOutput("UCI_PROJ"), style = "color:yellow"),tags$br(),
+                            "The full heart failure clinical records dataset contains de-identified medical 
+                            records from 299 patients who had heart failure.  This information was collected 
+                            during a follow-up period.  Each patient file is considered as one row of this 
+                            dataset, where each patient profile contains 13 clinical features, which will be 
+                            described in detail on the Information tab in the left-hand toolbar.  The full
+                            dataset can be downloaded directly by clicking the 
+                            following link: ", span(uiOutput("UCI_fullDATA"), style = "color:yellow"),tags$br(),
+                            
                         )
                     )
+            ),
+            
+            # Second tab content
+            tabItem(tabName = "explore",
+                    h2("Data Exploration tab content"),
+                    box(
+                        title = "Title 6",width = 5, background = "black",
+                        "A box with a solid black background"
+                    ),
+            ),
+            
+            # Third tab content
+            tabItem(tabName = "info",
+                    h2("Information tab content"),
+                    tableOutput("TABLE1")
             ),
             # Fourth tab content
             tabItem(tabName = "charts",
@@ -70,14 +88,16 @@ ui <- dashboardPage(skin = "red",
                         box(
                             title = "Controls", background = "black",
                             setSliderColor(c("red"),c(1)),
-                            sliderInput("obs1", "Number of observations:", 1, 100, 50)
+                            sliderInput("obs1", "Size of Points on Graph:",
+                                        min = 1, max = 10, value = 5, step = 1)
                         )
                     )
             ),
             
             #Fifth tab content
             tabItem(tabName = "data",
-                    h2("Data Information goes here"))
+                    h2("Data goes here")
+            )
         )
     )
 )
