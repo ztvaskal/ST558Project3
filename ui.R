@@ -1,10 +1,20 @@
 ## ui.R ##
+## Programmed By: Zack Vaskalis ##
+## Programmed Date: 07.27.2020 ##
+## Programmed For: ST 558 Project 3 ##
 
+## Load Libraries ##
 library(shiny)
 library(shinydashboard)
 library(shinythemes)
 library(shinyWidgets)
+library(colourpicker)
+library(tidyverse)
+library(dplyr)
+library(DT)
 
+
+## UI ##
 ui <- dashboardPage(skin = "red", 
     dashboardHeader(title = "ST 558 Project 3 - Zack Vaskalis", titleWidth = 350),
     ## Sidebar content
@@ -33,13 +43,22 @@ ui <- dashboardPage(skin = "red",
             
             # Third tab content
             tabItem(tabName = "info",
-                    box(
-                        title = "Title 5", width = 4, background = "red",
-                        "A box with a solid light-blue background"
+                    fluidRow(
+                        box(
+                            background = "navy",
+                            htmlOutput("UCI_LOGO"), 
+                        )
                     ),
-                    box(
-                        title = "Title 6",width = 4, background = "black",
-                        "A box with a solid maroon background"
+                    
+                    fluidRow(
+                        box(
+                            title = "Title 5", width = 6, background = "red",
+                            "A box with a solid red background"
+                        ),
+                        box(
+                            title = "Title 6",width = 6, background = "black",
+                            "A box with a solid black background"
+                        )
                     )
             ),
             # Fourth tab content
