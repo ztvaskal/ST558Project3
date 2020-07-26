@@ -150,6 +150,7 @@ server <- function(input, output, session) {
             var1 <- fig1$Time
             var2 <- fig2$Time
         }
+
         x <- list(title = names(fig1)[n]) #replaced 1 with n
         y <- list(title = "Frequency")
         
@@ -160,36 +161,63 @@ server <- function(input, output, session) {
         fig
     })
     
-    # Prep Data for FULL Data Table
-    df <- describeBy(hfcrDATA)
-    df %>% filter(vars<8) %>>% (~ DF0)
-    DF <- formatRound(datatable(DF0),columns=c(3:13),digits=2)
-    
     # FULL Data Table of Selected Variables
     output$TABLE3 <- DT::renderDataTable({
-        DF
+        if (input$variable == "Age"){n <- 1}
+        if (input$variable == "CPK"){n <- 2}
+        if (input$variable == "EF"){n <- 3}
+        if (input$variable == "Platelet"){n <- 4}
+        if (input$variable == "SCr"){n <- 5}
+        if (input$variable == "SNa"){n <- 6}
+        if (input$variable == "Time"){n <- 7}
+        
+        # Prep Data for FULL Data Table
+        df <- describeBy(hfcrDATA)
+        df %>% filter(vars<8) %>>% (~ DF0)
+        DF <- formatRound(datatable(DF0),columns=c(3:13),digits=2)
+        DF %>% formatStyle('vars', target = 'row',
+                           backgroundColor = styleEqual(c(n), c('lightgray'))) %>>% (~ cDF)
+        cDF
     })
-    
-    # Prep Data for Survived Data Table
-    hfcrDATA1 <- filter(hfcrDATA, Target==0)
-    df1A <- describeBy(hfcrDATA1)
-    df1A %>% filter(vars<8) %>>% (~ DF1B)
-    DF1C <- formatRound(datatable(DF1B),columns=c(3:13),digits=2)
     
     # Survived Data Table of Selected Variables
     output$TABLE4 <- DT::renderDataTable({
-        DF1C
+        if (input$variable == "Age"){n <- 1}
+        if (input$variable == "CPK"){n <- 2}
+        if (input$variable == "EF"){n <- 3}
+        if (input$variable == "Platelet"){n <- 4}
+        if (input$variable == "SCr"){n <- 5}
+        if (input$variable == "SNa"){n <- 6}
+        if (input$variable == "Time"){n <- 7}
+        
+        # Prep Data for Survived Data Table
+        hfcrDATA1 <- filter(hfcrDATA, Target==0)
+        df1A <- describeBy(hfcrDATA1)
+        df1A %>% filter(vars<8) %>>% (~ DF1B)
+        DF1C <- formatRound(datatable(DF1B),columns=c(3:13),digits=2)
+        DF1C %>% formatStyle('vars', target = 'row',
+                           backgroundColor = styleEqual(c(n), c('lightgray'))) %>>% (~ cDF1C)
+        cDF1C
     })
-    
-    # Prep Data for Dead Data Table
-    hfcrDATA2 <- filter(hfcrDATA, Target==1)
-    df2A <- describeBy(hfcrDATA2)
-    df2A %>% filter(vars<8) %>>% (~ DF2B)
-    DF2C <- formatRound(datatable(DF2B),columns=c(3:13),digits=2)
     
     # Dead Data Table of Selected Variables
     output$TABLE5 <- DT::renderDataTable({
-        DF2C
+        if (input$variable == "Age"){n <- 1}
+        if (input$variable == "CPK"){n <- 2}
+        if (input$variable == "EF"){n <- 3}
+        if (input$variable == "Platelet"){n <- 4}
+        if (input$variable == "SCr"){n <- 5}
+        if (input$variable == "SNa"){n <- 6}
+        if (input$variable == "Time"){n <- 7}
+        
+        # Prep Data for Dead Data Table
+        hfcrDATA2 <- filter(hfcrDATA, Target==1)
+        df2A <- describeBy(hfcrDATA2)
+        df2A %>% filter(vars<8) %>>% (~ DF2B)
+        DF2C <- formatRound(datatable(DF2B),columns=c(3:13),digits=2)
+        DF2C %>% formatStyle('vars', target = 'row',
+                             backgroundColor = styleEqual(c(n), c('lightgray'))) %>>% (~ cDF2C)
+        cDF2C
     })    
     
     
