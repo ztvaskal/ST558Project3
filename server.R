@@ -29,7 +29,7 @@ names(hfcrRAW)[3]<-"CPK"
 names(hfcrRAW)[4]<-"Diabetes"
 names(hfcrRAW)[5]<-"EF"
 names(hfcrRAW)[6]<-"HighBP"
-names(hfcrRAW)[7]<-"Platlet"
+names(hfcrRAW)[7]<-"Platelet"
 names(hfcrRAW)[8]<-"SCr"
 names(hfcrRAW)[9]<-"SNa"
 names(hfcrRAW)[10]<-"Sex"
@@ -114,12 +114,48 @@ server <- function(input, output, session) {
     
     # Histogram Figure Info
     output$FIG <- renderPlotly({
-        x <- list(title = names(fig1)[1])
+        varLIST <- select(hfcrDATA, Age:Time)
+        if (input$variable == "Age"){
+            n <- 1
+            var1 <- fig1$Age
+            var2 <- fig2$Age
+        }
+        if (input$variable == "CPK"){
+            n <- 2
+            var1 <- fig1$CPK
+            var2 <- fig2$CPK
+        }
+        if (input$variable == "EF"){
+            n <- 3
+            var1 <- fig1$EF
+            var2 <- fig2$EF
+        }
+        if (input$variable == "Platelet"){
+            n <- 4
+            var1 <- fig1$Platelet
+            var2 <- fig2$Platelet
+        }
+        if (input$variable == "SCr"){
+            n <- 5
+            var1 <- fig1$SCr
+            var2 <- fig2$SCr
+        }
+        if (input$variable == "SNa"){
+            n <- 6
+            var1 <- fig1$SNa
+            var2 <- fig2$SNa
+        }
+        if (input$variable == "Time"){
+            n <- 7
+            var1 <- fig1$Time
+            var2 <- fig2$Time
+        }
+        x <- list(title = names(fig1)[n]) #replaced 1 with n
         y <- list(title = "Frequency")
         
         fig <- plot_ly(alpha = 0.5)
-        fig <- fig %>% add_histogram(x = fig1$Age, name = "survived")
-        fig <- fig %>% add_histogram(x = fig2$Age, name = "dead")
+        fig <- fig %>% add_histogram(x = var1, name = "survived") #replaced fig1$Age with var1
+        fig <- fig %>% add_histogram(x = var2, name = "dead") #replaced fig2$Age with var2
         fig <- fig %>% layout(xaxis = x, yaxis = y, barmode = "overlay")
         fig
     })

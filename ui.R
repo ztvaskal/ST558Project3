@@ -79,7 +79,7 @@ ui <- dashboardPage(skin = "yellow",
                             plotlyOutput(outputId = "FIG")
                             ),
                         box(width = 5,
-                            varSelectInput("variable", "Variable:", hfcrDATA)
+                            varSelectInput("variable", "Variable:", varLIST)
                             )
                     ),
                     fluidRow(
