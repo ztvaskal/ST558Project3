@@ -75,13 +75,18 @@ ui <- dashboardPage(skin = "yellow",
             tabItem(tabName = "explore", h2("Basic Exploratory Data Analysis: Simple Descriptives & Histograms"),
                     fluidRow(
                         box(
-                            title = "Title 6",width = 5, background = "black",
-                            "A box with a solid black background"
-                        )
+                            title = "Histogram", solidHeader = TRUE,
+                            plotlyOutput(outputId = "FIG")
+                            ),
+                        box(width = 5,
+                            varSelectInput("variable", "Variable:", hfcrDATA)
+                            )
                     ),
                     fluidRow(
-                        box(
-                            varSelectInput("variable", "Variable:", hfcrDATA)
+                        tabsetPanel(type = "tabs",
+                                    tabPanel("Full Dataset", DT::dataTableOutput("TABLE3")),
+                                    tabPanel("Survived", DT::dataTableOutput("TABLE4")),
+                                    tabPanel("Dead", DT::dataTableOutput("TABLE5"))
                         )
                     )
             ),
@@ -99,7 +104,7 @@ ui <- dashboardPage(skin = "yellow",
                     tabsetPanel(type = "tabs",
                                 tabPanel("Variables", tableOutput("TABLE1")),
                                 tabPanel("Dataset", DT::dataTableOutput("TABLE2"))
-                    )
+                                )
                     ),
             # Fourth tab content
             tabItem(tabName = "charts",

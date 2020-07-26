@@ -81,7 +81,7 @@ server <- function(input, output, session) {
         tagList("", uciarticle)
     })  
     
-    #Info Table of Dataset variables
+    # Info Table of Dataset variables
     table1 <- 0 
     table1 <- tribble( ~Feature, ~Explanation, ~Measurement, ~Range,
                        "Age", "Age of the patient", "Years", "[40,...,95]",
@@ -98,15 +98,68 @@ server <- function(input, output, session) {
                        "Smoke", "If Patient Smokes", "Boolean", "0,1",
                        "Target (Death Event)", "If Patient Died during follow-up period", "Boolean", "0,1")
 
-    #Output Table1 Information
+    # Output Table1 Information
     output$TABLE1 <- renderTable({
         data=table1
     })
     
-    #Output Table2 Information
+    # Output Table2 Information
     output$TABLE2 <- DT::renderDataTable({
         hfcrDATA
     })
 
+    # Prep for Plotly Histogram
+    fig1 <- filter(hfcrDATA, Target==0)
+    fig2 <- filter(hfcrDATA, Target==1)
+    
+    # Histogram Figure Info
+    output$FIG <- renderPlotly({
+        x <- list(title = names(fig1)[1])
+        y <- list(title = "Frequency")
+        
+        fig <- plot_ly(alpha = 0.5)
+        fig <- fig %>% add_histogram(x = fig1$Age, name = "survived")
+        fig <- fig %>% add_histogram(x = fig2$Age, name = "dead")
+        fig <- fig %>% layout(xaxis = x, yaxis = y, barmode = "overlay")
+        fig
+    })
+    
+    # Prep Data for FULL Data Table
+    df <- describeBy(hfcrDATA)
+    df %>% filter(vars<8) %>>% (~ DF0)
+    DF <- formatRound(datatable(DF0),columns=c(3:13),digits=2)
+    
+    # FULL Data Table of Selected Variables
+    output$TABLE3 <- DT::renderDataTable({
+        DF
+    })
+    
+    # Prep Data for Survived Data Table
+    hfcrDATA1 <- filter(hfcrDATA, Target==0)
+    df1A <- describeBy(hfcrDATA1)
+    df1A %>% filter(vars<8) %>>% (~ DF1B)
+    DF1C <- formatRound(datatable(DF1B),columns=c(3:13),digits=2)
+    
+    # Survived Data Table of Selected Variables
+    output$TABLE4 <- DT::renderDataTable({
+        DF1C
+    })
+    
+    # Prep Data for Dead Data Table
+    hfcrDATA2 <- filter(hfcrDATA, Target==1)
+    df2A <- describeBy(hfcrDATA2)
+    df2A %>% filter(vars<8) %>>% (~ DF2B)
+    DF2C <- formatRound(datatable(DF2B),columns=c(3:13),digits=2)
+    
+    # Dead Data Table of Selected Variables
+    output$TABLE5 <- DT::renderDataTable({
+        DF2C
+    })    
+    
+    
+    
+    
+    
+    
     
 }
