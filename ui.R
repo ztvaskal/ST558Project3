@@ -25,12 +25,12 @@ ui <- dashboardPage(skin = "yellow",
     dashboardSidebar(
         width = 300,
         sidebarMenu(
-            menuItem("Dashboard", tabName = "dashboard", icon = icon("dashboard")),
+            menuItem("Dashboard", tabName = "dashboard", icon = icon("heartbeat")),
             menuItem("Information", tabName = "info", icon = icon("info-circle")),
             menuItem("Data", tabName = "data", icon = icon("database")),
             menuItem("Data Exploration - Numeric Variables", tabName = "explore1", icon = icon("area-chart")),
             menuItem("Data Exploration - Categorical Variables", tabName = "explore2", icon = icon("bar-chart")),
-            menuItem("Charts", tabName = "charts", icon = icon("bar-chart-o"))
+            menuItem("Scatter Plot", tabName = "scatter", icon = icon("line-chart"))
         )
     ),
     ## Body content
@@ -82,7 +82,7 @@ ui <- dashboardPage(skin = "yellow",
                             title = "Histogram", solidHeader = TRUE,
                             plotlyOutput(outputId = "FIG")
                             ),
-                        box(width = 5,
+                        box(
                             "You can use the dropdown menu below to select which numeric variable you
                             would like to investigate.  The histogram plot to the left is created using
                             the R plotly package.  It includes two layers, seperated by color,
@@ -144,24 +144,40 @@ ui <- dashboardPage(skin = "yellow",
                                 )
                     ),
             #CHARTS tab content
-            tabItem(tabName = "charts",
+            tabItem(tabName = "scatter",
                     fluidRow(
-                        box(title = "Histogram", background = "red", solidHeader = TRUE,
-                            plotOutput("plot1", height = 500)),
-                        
+                        box(title = "Scatterplot",
+                            plotlyOutput(outputId = "SPLOT")
+                            ),
                         box(
-                            title = "Controls", background = "black",
-                            setSliderColor(c("red"),c(1)),
-                            sliderInput("obs1", "Size of Points on Graph:",
-                                        min = 1, max = 10, value = 5, step = 1)
-                        )
+                            "You can use the dropdown menu below to select the numeric variables you
+                            would like to investigate to explore the relationship between.  For the x variable,
+                            you can choose from any one of the 7 numeric variables in the dataset.  Similarly,
+                            for the y variable you can choose from the same set of 7 variables.  Thus, you could
+                            plot a variable against itself, which would be a straight line.  Based on the analysis
+                            of the dataset, however, the default status is actually a scatterplot of interest, as
+                            the relationship between a patient's serum creatinine level and ejection fraction turns
+                            out to be of interest, as you can see a clear distinction between the two groups of
+                            the target variable when viewing the relationship between SCr and EF.",tags$br(),tags$br(),
+                            "The scatterplot to the left is again created using the R plotly package.
+                            It includes the two selected variables, x and y, and plots them grouped by color,
+                            on the target variable status, blue for those who survived,
+                            and red for those patients who died during follow-up.
+                            Just as before, you can click your mouse and select a rectangular area
+                            of the plot to zoom-in on.  Additionally, when your mouse hovers over the plot
+                            you will see a toolbar appear at the top. The first option, denoted by a camera
+                            icon is to download the plot as a png.",icon("camera")
+                            )
+                            ),
+                    fluidRow(
+                        box(
+                            varSelectInput("varX", "X Variable:", selected = "SCr", varLISTX)
+                            ),
+                        box(
+                            varSelectInput("varY", "Y Variable:", selected = "EF", varLISTY)
+                            )
+                            )
                     ),
-                    fluidRow(
-                        box(
-                            varSelectInput("variable", "Variable:", hfcrDATA)
-                        )
-                    )
-            ),
             
             #INFO tab content
             tabItem(tabName = "info",

@@ -403,7 +403,7 @@ server <- function(input, output, session) {
             
             figS <- plot_ly(dataS, x = xVARSS, y = ZerosS, type = 'bar', name = '0')
             figS <- figS %>% add_trace(y = ~OnesS, name = '1')
-            figS <- figS %>% layout(title = "Full Dataset", yaxis = list(title = 'Count'), barmode = 'group')
+            figS <- figS %>% layout(title = "Survived", yaxis = list(title = 'Count'), barmode = 'group')
             
             figS
         }
@@ -417,11 +417,48 @@ server <- function(input, output, session) {
             
             figD <- plot_ly(dataD, x = xVARSD, y = ZerosD, type = 'bar', name = '0')
             figD <- figD %>% add_trace(y = ~OnesD, name = '1')
-            figD <- figD %>% layout(title = "Full Dataset", yaxis = list(title = 'Count'), barmode = 'group')
+            figD <- figD %>% layout(title = "Dead", yaxis = list(title = 'Count'), barmode = 'group')
             
             figD
         }
     })
+    
+    varLISTX <- select(hfcrDATA, Age:Time)
+    varLISTY <- select(hfcrDATA, Age:Time)
+    vLX <- reactive({filter(hfcrDATA, Target<2)})
+    vLY <- reactive({filter(hfcrDATA, Target<2)})
+    
+    observe({input$varX})
+    observe({input$varY})
+    
+    # Scatterplot Figure Info
+    output$SPLOT <- renderPlotly({
+
+        if (input$varX == "Age"){vX <- vLX()$Age}
+        if (input$varX == "CPK"){vX <- vLX()$CPK}
+        if (input$varX == "EF"){vX <- vLX()$EF}
+        if (input$varX == "Platelet"){vX <- vLX()$Platelet}
+        if (input$varX == "SCr"){vX <- vLX()$SCr}
+        if (input$varX == "SNa"){vX <- vLX()$SNa}
+        if (input$varX == "Time"){vX <- vLX()$Time}
+        
+        if (input$varY == "Age"){vY <- vLY()$Age}
+        if (input$varY == "CPK"){vY <- vLY()$CPK}
+        if (input$varY == "EF"){vY <- vLY()$EF}
+        if (input$varY == "Platelet"){vY <- vLY()$Platelet}
+        if (input$varY == "SCr"){vY <- vLY()$SCr}
+        if (input$varY == "SNa"){vY <- vLY()$SNa}
+        if (input$varY == "Time"){vY <- vLY()$Time}
+        
+        varLISTP <- select(hfcrDATA, Age:Time,Target)
+        varLISTP$TargetC <- ifelse((varLISTP$Target==0),"Survived","Dead")
+        scatrPlot <- plot_ly(data = varLISTP, type = "scatter",x = vX, y = vY,
+                             color = ~TargetC, colors = "Set1", mode = "markers")
+        scatrPlot <- scatrPlot %>% layout(xaxis = list(title = "X Variable"),
+                                          yaxis = list(title = "Y Variable"))
+        scatrPlot
+    })
+
     
     
 }
