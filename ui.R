@@ -16,6 +16,8 @@ library(DT)
 library(psych)
 library(plotly)
 library(pipeR)
+library(heatmaply)
+library(dendextend)
 
 
 ## UI ##
@@ -30,7 +32,8 @@ ui <- dashboardPage(skin = "yellow",
             menuItem("Data", tabName = "data", icon = icon("database")),
             menuItem("Data Exploration - Numeric Variables", tabName = "explore1", icon = icon("area-chart")),
             menuItem("Data Exploration - Categorical Variables", tabName = "explore2", icon = icon("bar-chart")),
-            menuItem("Scatter Plot", tabName = "scatter", icon = icon("line-chart"))
+            menuItem("Scatter Plot", tabName = "scatter", icon = icon("line-chart")),
+            menuItem("Clustering - Unsupervised", tabName = "cluster", icon = icon("object-group"))
         )
     ),
     ## Body content
@@ -210,7 +213,31 @@ ui <- dashboardPage(skin = "yellow",
                     box(
                         title = "App Abilities", width = 6, background = "purple",
                         "A box with a solid white background"
-                    ),
+                    )
+            ),
+            
+            #Cluster tab content
+            tabItem(tabName = "cluster",
+                    h2("Unsupervised Learning - Hierarchical Clustering: Dendrogram"),
+                    fluidRow(
+                        box(width = 8, title = "Dendrogram for Heart Failure Dataset", solidHeader = TRUE,
+                            plotlyOutput(outputId = "DDGRAMHEATMAP")
+                        ),
+                        box(width = 3,
+                            "Please be patient as this plot may take a moment to load",tags$br(),tags$br(),
+                            "Please choose from the three dendrogram methods. The default method
+                            for this application is - centroid.",tags$br(),tags$br(),
+                            selectInput("ddgramMeth", "Dendrogram Method:",
+                                        choices = c("centroid", "complete", "average"),
+                                        selected = "centroid"),
+                            "The dendrogram hierarchical cluster uses the R package heatmaply. This is very similar
+                            to the other graphs produced by the plotly package, i.e. you can select an area of
+                            interest on the plot and zoom in, allowing you to see the de-identified patient
+                            record numbers on the left hand axis.  You can also save this plot as a png, the same
+                            way you did previously.  Any time you need to reset, simply click on the
+                            Home button.",icon("home")
+                        )
+                    )
             )
         )
     )

@@ -15,6 +15,8 @@ library(DT)
 library(psych)
 library(plotly)
 library(pipeR)
+library(heatmaply)
+library(dendextend)
 
 ## Code here that you only need to evaluate once. This can include reading in data, 
 ## creation of functions common to all sessions, and reading of other common r scripts.
@@ -430,6 +432,23 @@ server <- function(input, output, session) {
         scatrPlot
     })
 
-    
-    
+    # Scatterplot Figure Info
+    output$DDGRAMHEATMAP <- renderPlotly({
+        if (input$ddgramMeth == "centroid")
+        {
+        HC <- hclust(dist(data.frame(hfcrDATA)), method = "centroid")
+        heatmaply(scale(hfcrDATA), k_row = 2, k_col = 2)
+        }
+        
+        else if (input$ddgramMeth == "complete"){
+        HC <- hclust(dist(data.frame(hfcrDATA)), method = "complete")
+        heatmaply(scale(hfcrDATA), k_row = 2, k_col = 2)
+        }
+        
+        else {
+        HC <- hclust(dist(data.frame(hfcrDATA)), method = "average")
+        heatmaply(scale(hfcrDATA), k_row = 2, k_col = 2)
+        }
+        
+    })
 }
