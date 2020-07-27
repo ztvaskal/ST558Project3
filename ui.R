@@ -65,9 +65,9 @@ ui <- dashboardPage(skin = "yellow",
                             following link: ", span(uiOutput("UCI_fullDATA"), style = "color:red"),tags$br(),
                             tags$b("Data Set Information: "),tags$br(),
                             "A detailed description of the dataset can be found in the following paper: ",tags$br(),
-                            "Davide Chicco, Giuseppe Jurman: Machine learning can predict survival of patients 
-                            with heart failure from serum creatinine and ejection fraction alone. BMC Medical 
-                            Informatics and Decision Making 20, 16 (2020).",
+                            "Davide Chicco, Giuseppe Jurman: Machine learning can predict survival of patients
+                            with heart failure from serum creatinine and ejection fraction alone.",tags$i("BMC Medical 
+                            Informatics and Decision Making 20, 16 (2020)."),
                             span(uiOutput("UCI_ARTICLE"), style = "color:red"),tags$br()
                             
                         )
