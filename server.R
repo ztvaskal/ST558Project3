@@ -18,6 +18,7 @@ library(pipeR)
 library(heatmaply)
 library(dendextend)
 library(tree)
+library(caret)
 
 ## Code here that you only need to evaluate once. This can include reading in data, 
 ## creation of functions common to all sessions, and reading of other common r scripts.

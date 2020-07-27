@@ -19,6 +19,7 @@ library(pipeR)
 library(heatmaply)
 library(dendextend)
 library(tree)
+library(caret)
 
 
 ## UI ##
