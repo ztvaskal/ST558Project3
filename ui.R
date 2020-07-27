@@ -93,7 +93,7 @@ ui <- dashboardPage(skin = "yellow",
                             icon is to download the plot as a png.",icon("camera"),tags$br(),tags$br(),
                             selectInput("variable", "Variable:",
                                         choices = c("Age","CPK","EF","Platelet","SCr","SNa","Time"),
-                                        selected = "Full"),
+                                        selected = "Age"),
                             "Additionally, you can download the dataset used to produce the plot by clicking
                             on the download button below.",tags$br(),tags$br(),
                             downloadButton('downloadData', 'Download'),tags$br(),tags$br(),
@@ -173,10 +173,12 @@ ui <- dashboardPage(skin = "yellow",
                             ),
                     fluidRow(
                         box(
-                            varSelectInput("varX", "X Variable:", selected = "SCr", varLISTX)
+                            selectInput("varX", "X Variable:", selected = "SCr",
+                                           choices = c("Age","CPK","EF","Platelet","SCr","SNa","Time"))
                             ),
                         box(
-                            varSelectInput("varY", "Y Variable:", selected = "EF", varLISTY)
+                            selectInput("varY", "Y Variable:", selected = "EF",
+                                           choices = c("Age","CPK","EF","Platelet","SCr","SNa","Time"))
                             )
                             )
                     ),
