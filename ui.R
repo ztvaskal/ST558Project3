@@ -22,19 +22,21 @@ ui <- dashboardPage(skin = "yellow",
     dashboardHeader(title = "ST 558 Project 3 - Zack Vaskalis", titleWidth = 350),
     ## Sidebar content
     dashboardSidebar(
-        width = 175,
+        width = 300,
         sidebarMenu(
             menuItem("Dashboard", tabName = "dashboard", icon = icon("dashboard")),
             menuItem("Information", tabName = "info", icon = icon("info-circle")),
             menuItem("Data", tabName = "data", icon = icon("database")),
-            menuItem("Data Exploration", tabName = "explore", icon = icon("search")),
+            menuItem("Data Exploration - Numeric Variables", tabName = "explore1", icon = icon("area-chart")),
+            menuItem("Data Exploration - Categorical Variables", tabName = "explore2", icon = icon("bar-chart")),
             menuItem("Charts", tabName = "charts", icon = icon("bar-chart-o"))
         )
     ),
     ## Body content
     dashboardBody(
+
         tabItems(
-            # First tab content
+            #DASHBOARD tab content
             tabItem(tabName = "dashboard",
                     fluidRow(
                         box(
@@ -71,15 +73,31 @@ ui <- dashboardPage(skin = "yellow",
                     )
             ),
             
-            # Second tab content
-            tabItem(tabName = "explore", h2("Basic Exploratory Data Analysis: Simple Descriptives & Histograms"),
+            #EXPLORE1 tab content
+            tabItem(tabName = "explore1",
+                    h2("Basic Exploratory Data Analysis: Simple Descriptives & Histograms"),
                     fluidRow(
-                        box(
+                        box(width = 5,
                             title = "Histogram", solidHeader = TRUE,
                             plotlyOutput(outputId = "FIG")
                             ),
                         box(width = 5,
-                            varSelectInput("variable", "Variable:", varLIST)
+                            "You can use the dropdown menu below to select which numeric variable you
+                            would like to investigate.  The histogram plot to the left is created using
+                            the R plotly package.  It includes two layers, seperated by color,
+                            blue for those who survived, and orange for those patients who died during
+                            follow-up.  You can click your mouse and select a rectangular area
+                            of the plot to zoom-in on.  Additionally, when your mouse hovers over the plot
+                            you will see a toolbar appear at the top. The first option, denoted by a camera
+                            icon is to download the plot as a png.",icon("camera"),tags$br(),tags$br(),
+                            varSelectInput("variable", "Variable:", varLIST),
+                            "Additionally, you can download the dataset used to produce the plot by clicking
+                            on the download button below.",tags$br(),tags$br(),
+                            downloadButton('downloadData', 'Download'),tags$br(),tags$br(),
+                            "Also, below is a tabset of summary data for the numerical variables showcasing
+                            standard descriptive statistics.  The first tab is for the full dataset, the
+                            second is for patients who survived, and the third is for those patients
+                            who died during the follow-up period."
                             )
                     ),
                     fluidRow(
@@ -91,7 +109,24 @@ ui <- dashboardPage(skin = "yellow",
                     )
             ),
             
-            # Third tab content
+            #EXPLORE1 tab content
+            tabItem(tabName = "explore2",
+                    h2("Basic Exploratory Data Analysis: Categorical Frequencies & Bar Charts"),
+                    fluidRow(
+                        box(width = 5,title = "Categorical Data", solidHeader = TRUE,
+                            DT::dataTableOutput("TABLE6")
+                            ),
+                        box(width = 5,title = "Barchart", solidHeader = TRUE
+                        )
+                    ),
+                    fluidRow(
+                        box(width = 5
+                        )
+                    )
+            ),
+                    
+            
+            #DATA tab content
             tabItem(tabName = "data",
                     box(title = "Heart Failure Dataset", width = 13,
                         "Below is a set of tabs containing: [TAB 1] a table of the 13 patient record 
@@ -106,7 +141,7 @@ ui <- dashboardPage(skin = "yellow",
                                 tabPanel("Dataset", DT::dataTableOutput("TABLE2"))
                                 )
                     ),
-            # Fourth tab content
+            #CHARTS tab content
             tabItem(tabName = "charts",
                     fluidRow(
                         box(title = "Histogram", background = "red", solidHeader = TRUE,
@@ -126,12 +161,27 @@ ui <- dashboardPage(skin = "yellow",
                     )
             ),
             
-            #Fifth tab content
+            #INFO tab content
             tabItem(tabName = "info",
                     h2("Info page that describes data and app abilities goes here"),
                     box(
                         title = "Data Description", width = 6, background = "navy",
-                        "A box with a solid navy background"
+                        "The dashboard page introduced the heart failure clinical records
+                        dataset very briefly.  The dataset will be introduced in a bit more
+                        detail here, however, for a full in depth look at the attributes and
+                        variables contained for each de-identified patient record, please
+                        refer to the next tab on the left-hand menu: Data.",tags$br(),tags$br(),
+                        "The dataset contains 13 variables for each de-identified patient record.
+                        THere are 7 numeric variables, 5 dichotomous categorical variables, and
+                        1 dichotmous variable, target, which is the event of interest, either
+                        the patient survived or died during the follow-up period.",tags$br(),tags$br(),
+                        "The 7 numeric variables of interest are age: age, creatinine phosphokinase (CPK),
+                        the ejection fraction: percentage of blood leaving the heart at each contraction,
+                        platelets in the blood, serum creatinine, serum sodium, and time or the length
+                        of days of the follow-up period.",tags$br(),tags$br(),
+                        "The 5 categorical variables are sex (0-woman, 1-man), smoke (0-false, 1-true),
+                        anemia (0-false, 1-true), high blood pressure (0-false, 1-true), and
+                        diabetes (0-false, 1-true)."
                     ),
                     box(
                         title = "App Abilities", width = 6, background = "purple",

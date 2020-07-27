@@ -114,7 +114,7 @@ server <- function(input, output, session) {
     
     # Histogram Figure Info
     output$FIG <- renderPlotly({
-        varLIST <- select(hfcrDATA, Age:Time)
+        varLIST <- dplyr::select(hfcrDATA, Age:Time)
         if (input$variable == "Age"){
             n <- 1
             var1 <- fig1$Age
@@ -161,7 +161,20 @@ server <- function(input, output, session) {
         fig
     })
     
-    # FULL Data Table of Selected Variables
+    varLIST <- dplyr::select(hfcrDATA, Age:Time)
+    
+    # Download subsetted dataset
+    output$downloadData <- downloadHandler(
+        
+       filename = function() {
+         paste('data-', Sys.Date(), '.csv', sep='')
+       },
+         content = function(con) {
+         write_csv(varLIST, con)
+       }
+    )
+    
+    # TABLE3 - FULL Data Table of Selected Variables
     output$TABLE3 <- DT::renderDataTable({
         if (input$variable == "Age"){n <- 1}
         if (input$variable == "CPK"){n <- 2}
@@ -180,7 +193,7 @@ server <- function(input, output, session) {
         cDF
     })
     
-    # Survived Data Table of Selected Variables
+    # TABLE 4 - Survived Data Table of Selected Variables
     output$TABLE4 <- DT::renderDataTable({
         if (input$variable == "Age"){n <- 1}
         if (input$variable == "CPK"){n <- 2}
@@ -200,7 +213,7 @@ server <- function(input, output, session) {
         cDF1C
     })
     
-    # Dead Data Table of Selected Variables
+    # TABLE 5 - Dead Data Table of Selected Variables
     output$TABLE5 <- DT::renderDataTable({
         if (input$variable == "Age"){n <- 1}
         if (input$variable == "CPK"){n <- 2}
@@ -220,8 +233,38 @@ server <- function(input, output, session) {
         cDF2C
     })    
     
-    
-    
+    # TABLE 6 - Full Dataset Categorical
+    output$TABLE6 <- DT::renderDataTable({
+        varLIST2 <- dplyr::select(hfcrDATA, Anemia:Target)
+        table(varLIST2$Anemia,varLIST2$Target)
+        
+        AnemiaF <- table(varLIST2$Anemia)
+        HBPF <- table(varLIST2$HighBP)
+        DiabF <- table(varLIST2$Diabetes)
+        SexF <- table(varLIST2$Sex)
+        SmokeF <- table(varLIST2$Smoke)
+        
+        AnemiaFPer <- table(varLIST2$Anemia)/299*100
+        HBPFPer <- table(varLIST2$HighBP)/299*100
+        DiabFPer <- table(varLIST2$Diabetes)/299*100
+        SexFPer <- table(varLIST2$Sex)/299*100
+        SmokeFPer <- table(varLIST2$Smoke)/299*100
+        
+        catF <- 0 
+        catF <- tribble( ~'Category Feature', ~Count, ~Percent,
+                         "Anemia (0-false)", AnemiaF[[1]],AnemiaFPer[[1]],
+                         "Anemia (1-true)", AnemiaF[[2]],AnemiaFPer[[2]],
+                         "High BP (0-false)", HBPF[[1]], HBPFPer[[1]],
+                         "High BP (1-true)", HBPF[[2]],HBPFPer[[2]],
+                         "Diabetes (0-false)", DiabF[[1]], DiabFPer[[1]],
+                         "Diabetes (1-true)", DiabF[[2]], DiabFPer[[2]],
+                         "Smoke (0-false)", SmokeF[[1]], SmokeFPer[[1]],
+                         "Smoke (1-true)", SmokeF[[2]], SmokeFPer[[2]],
+                         "Sex (0-woman)", SexF[[1]], SexFPer[[1]],
+                         "Sex (1-man)", SexF[[2]], SexFPer[[2]])
+        catFF <- formatRound(datatable(catF,rownames=FALSE),columns=c(3),digits=2)
+        catFF
+    })
     
     
     
