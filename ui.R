@@ -91,7 +91,9 @@ ui <- dashboardPage(skin = "yellow",
                             of the plot to zoom-in on.  Additionally, when your mouse hovers over the plot
                             you will see a toolbar appear at the top. The first option, denoted by a camera
                             icon is to download the plot as a png.",icon("camera"),tags$br(),tags$br(),
-                            varSelectInput("variable", "Variable:", varLIST),
+                            selectInput("variable", "Variable:",
+                                        choices = c("Age","CPK","EF","Platelet","SCr","SNa","Time"),
+                                        selected = "Full"),
                             "Additionally, you can download the dataset used to produce the plot by clicking
                             on the download button below.",tags$br(),tags$br(),
                             downloadButton('downloadData', 'Download'),tags$br(),tags$br(),
