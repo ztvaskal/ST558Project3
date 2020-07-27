@@ -173,12 +173,14 @@ ui <- dashboardPage(skin = "yellow",
                             ),
                     fluidRow(
                         box(
-                            selectInput("varX", "X Variable:", selected = "SCr",
-                                           choices = c("Age","CPK","EF","Platelet","SCr","SNa","Time"))
+                            selectInput("varX", "X Variable:",
+                                        choices = c("Age","CPK","EF","Platelet","SCr","SNa","Time"),
+                                        selected = "SCr")
                             ),
                         box(
-                            selectInput("varY", "Y Variable:", selected = "EF",
-                                           choices = c("Age","CPK","EF","Platelet","SCr","SNa","Time"))
+                            selectInput("varY", "Y Variable:",
+                                        choices = c("Age","CPK","EF","Platelet","SCr","SNa","Time"),
+                                        selected = "EF")
                             )
                             )
                     ),
