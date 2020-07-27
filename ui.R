@@ -18,6 +18,7 @@ library(plotly)
 library(pipeR)
 library(heatmaply)
 library(dendextend)
+library(tree)
 
 
 ## UI ##
@@ -33,7 +34,10 @@ ui <- dashboardPage(skin = "yellow",
             menuItem("Data Exploration - Numeric Variables", tabName = "explore1", icon = icon("area-chart")),
             menuItem("Data Exploration - Categorical Variables", tabName = "explore2", icon = icon("bar-chart")),
             menuItem("Scatter Plot", tabName = "scatter", icon = icon("line-chart")),
-            menuItem("Clustering - Unsupervised", tabName = "cluster", icon = icon("object-group"))
+            menuItem("Clustering - Unsupervised", tabName = "cluster", icon = icon("object-group")),
+            menuItem("Logisitic Regression - Supervised", tabName = "logreg", icon = icon("sitemap")),
+            menuItem("Classification Trees - Supervised", tabName = "classtree", icon = icon("tree")),
+            menuItem("Customized Predictions", tabName = "custompred", icon = icon("map-signs"))
         )
     ),
     ## Body content
@@ -236,6 +240,63 @@ ui <- dashboardPage(skin = "yellow",
                             record numbers on the left hand axis.  You can also save this plot as a png, the same
                             way you did previously.  Any time you need to reset, simply click on the
                             Home button.",icon("home")
+                        )
+                    )
+            ),
+            
+            #LOGREG tab content
+            tabItem(tabName = "logreg",
+                    fluidRow(
+                        box(width = 5
+                        ),
+                        box(
+                            
+                        )
+                    ),
+                    fluidRow(
+                        box(width = 5
+
+                        ),
+                        box(
+                            
+                        )
+                    )
+            ),
+            
+            #CLASSTREE tab content
+            tabItem(tabName = "classtree",
+                    fluidRow(
+                        box(width = 5
+                        ),
+                        box(
+                            
+                        )
+                    ),
+                    fluidRow(
+                        box(width = 5
+                            
+                        ),
+                        box(
+                            
+                        )
+                    )
+            ),
+            
+            #CUSTOMPRED tab content
+            tabItem(tabName = "custompred",
+                    fluidRow(
+                        box(width = 5
+                        ),
+                        box(
+                            
+                        )
+                    ),
+                    fluidRow(
+                        box(width = 5
+                            
+                        ),
+                        box(
+                            
                         )
                     )
             )

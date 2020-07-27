@@ -17,6 +17,7 @@ library(plotly)
 library(pipeR)
 library(heatmaply)
 library(dendextend)
+library(tree)
 
 ## Code here that you only need to evaluate once. This can include reading in data, 
 ## creation of functions common to all sessions, and reading of other common r scripts.
@@ -451,4 +452,28 @@ server <- function(input, output, session) {
         }
         
     })
+    
+    ## Logistic Regression
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    ## Classification Trees
+    output$GINIPLOT <- renderPlot({
+        
+    })
+    
+    
+    
+    
 }
