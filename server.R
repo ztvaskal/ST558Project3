@@ -40,17 +40,13 @@ names(hfcrRAW)[13]<-"Target"
 
 ## Reorder Variables
 hfcrDATA <- hfcrRAW[,c(1,3,5,7,8,9,12,2,4,6,10,11,13)]
+varLIST <- select(hfcrDATA, Age:Time)
+varLISTX <- select(hfcrDATA, Age:Time)
+varLISTY <- select(hfcrDATA, Age:Time)
+
     
 ## Server - Code here that can be reactive. Differs for every instance of your app that runs.
 server <- function(input, output, session) {
-    # Stock TEMPLATE INFO
-    set.seed(122)
-    histdata <- rnorm(500)
-    
-    output$plot1 <- renderPlot({
-        data <- histdata[seq_len(input$obs1)]
-        hist(data)
-    })
     # Picture of UCI Database
     output$UCI_LOGO <-
         renderText({
