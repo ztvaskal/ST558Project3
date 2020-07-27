@@ -477,20 +477,20 @@ server <- function(input, output, session) {
     
     mtry <- c(2,3,sqrt(dim(trainSet)[2]-1),4,5,6)
     trCtrl1 <- trainControl(method = "cv", number = 10)
-    fitRF <- train(Target ~ ., data = trainSet, method = "rf",
+    fitRF <- reactive({train(Target ~ ., data = trainSet, method = "rf",
                    trControl = trCtrl1, preProcess = c("center", "scale"),
-                   ntree = 500, tuneGrid = expand.grid(.mtry = mtry))
+                   ntree = 500, tuneGrid = expand.grid(.mtry = mtry))})
     
     output$RFFIT<- renderPrint({
-        fitRF
+        fitRF()
     })
     
     output$RFFIT2<- renderPrint({
-        fitRF$finalModel 
+        fitRF()$finalModel 
     })
     
     output$RFFIT3<- renderPrint({
-        predRF <- predict(fitRF, newdata = testSet)
+        predRF <- predict(fitRF(), newdata = testSet)
         predRF_RMSE <- sqrt(mean((predRF - testSet$Target)^2))
         paste0("Predicted RMSE = ",predRF_RMSE)
     })
