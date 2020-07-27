@@ -153,7 +153,7 @@ server <- function(input, output, session) {
             var2 <- fig2()$Time
         }
 
-        x <- list(title = names(fig1)[n]) #replaced 1 with n
+        x <- list(title = names(fig1())[n]) #replaced 1 with n
         y <- list(title = "Frequency")
         
         fig <- plot_ly(alpha = 0.5)
@@ -163,7 +163,7 @@ server <- function(input, output, session) {
         fig
     })
     
-    varLIST <- dplyr::select(hfcrDATA, Age:Time)
+
     
     # Download subsetted dataset
     output$downloadData <- downloadHandler(
@@ -235,21 +235,26 @@ server <- function(input, output, session) {
         cDF2C
     })    
     
+    varLIST2 <- reactive({filter(hfcrDATA, Target <2)}) #reactive({select(hfcrDATA, Anemia:Target)})
+    varLIST3 <- reactive({filter(varLIST2(), Target==0)})
+    varLIST4 <- reactive({filter(varLIST2(), Target==1)})
+    
+    observe({input$targetVar})
+    
     # TABLE 6 - Full Dataset Categorical
     output$TABLE6 <- DT::renderDataTable({
         
-        varLIST2 <- dplyr::select(hfcrDATA, Anemia:Target)
-        AnemiaF <- table(varLIST2$Anemia)
-        HBPF <- table(varLIST2$HighBP)
-        DiabF <- table(varLIST2$Diabetes)
-        SexF <- table(varLIST2$Sex)
-        SmokeF <- table(varLIST2$Smoke)
+        AnemiaF <- table(varLIST2()$Anemia)
+        HBPF <- table(varLIST2()$HighBP)
+        DiabF <- table(varLIST2()$Diabetes)
+        SexF <- table(varLIST2()$Sex)
+        SmokeF <- table(varLIST2()$Smoke)
         
-        AnemiaFPer <- table(varLIST2$Anemia)/299*100
-        HBPFPer <- table(varLIST2$HighBP)/299*100
-        DiabFPer <- table(varLIST2$Diabetes)/299*100
-        SexFPer <- table(varLIST2$Sex)/299*100
-        SmokeFPer <- table(varLIST2$Smoke)/299*100
+        AnemiaFPer <- table(varLIST2()$Anemia)/299*100
+        HBPFPer <- table(varLIST2()$HighBP)/299*100
+        DiabFPer <- table(varLIST2()$Diabetes)/299*100
+        SexFPer <- table(varLIST2()$Sex)/299*100
+        SmokeFPer <- table(varLIST2()$Smoke)/299*100
         
         catF <- 0 
         catF <- tribble( ~'Category Feature', ~Count, ~Percent,
@@ -263,16 +268,117 @@ server <- function(input, output, session) {
                          "Smoke (1-true)", SmokeF[[2]], SmokeFPer[[2]],
                          "Sex (0-woman)", SexF[[1]], SexFPer[[1]],
                          "Sex (1-man)", SexF[[2]], SexFPer[[2]])
-        catFF <- formatRound(datatable(catF,rownames=FALSE),columns=c(3),digits=2)
-        catFF
         
+        AnemiaS <- table(varLIST3()$Anemia)
+        HBPS <- table(varLIST3()$HighBP)
+        DiabS <- table(varLIST3()$Diabetes)
+        SexS <- table(varLIST3()$Sex)
+        SmokeS <- table(varLIST3()$Smoke)
+        
+        AnemiaSPer <- table(varLIST3()$Anemia)/203*100
+        HBPSPer <- table(varLIST3()$HighBP)/203*100
+        DiabSPer <- table(varLIST3()$Diabetes)/203*100
+        SexSPer <- table(varLIST3()$Sex)/203*100
+        SmokeSPer <- table(varLIST3()$Smoke)/203*100
+        
+        catSu <- 0 
+        catSu <- tribble( ~'Category Feature', ~Count, ~Percent,
+                          "Anemia (0-false)", AnemiaS[[1]],AnemiaSPer[[1]],
+                          "Anemia (1-true)", AnemiaS[[2]],AnemiaSPer[[2]],
+                          "High BP (0-false)", HBPS[[1]], HBPSPer[[1]],
+                          "High BP (1-true)", HBPS[[2]],HBPSPer[[2]],
+                          "Diabetes (0-false)", DiabS[[1]], DiabSPer[[1]],
+                          "Diabetes (1-true)", DiabS[[2]], DiabSPer[[2]],
+                          "Smoke (0-false)", SmokeS[[1]], SmokeSPer[[1]],
+                          "Smoke (1-true)", SmokeS[[2]], SmokeSPer[[2]],
+                          "Sex (0-woman)", SexS[[1]], SexSPer[[1]],
+                          "Sex (1-man)", SexS[[2]], SexSPer[[2]])
+        
+        AnemiaD <- table(varLIST4()$Anemia)
+        HBPD <- table(varLIST4()$HighBP)
+        DiabD <- table(varLIST4()$Diabetes)
+        SexD <- table(varLIST4()$Sex)
+        SmokeD <- table(varLIST4()$Smoke)
+        
+        AnemiaDPer <- table(varLIST4()$Anemia)/96*100
+        HBPDPer <- table(varLIST4()$HighBP)/96*100
+        DiabDPer <- table(varLIST4()$Diabetes)/96*100
+        SexDPer <- table(varLIST4()$Sex)/96*100
+        SmokeDPer <- table(varLIST4()$Smoke)/96*100
+        
+        catDu <- 0 
+        catDu <- tribble( ~'Category Feature', ~Count, ~Percent,
+                          "Anemia (0-false)", AnemiaD[[1]],AnemiaDPer[[1]],
+                          "Anemia (1-true)", AnemiaD[[2]],AnemiaDPer[[2]],
+                          "High BP (0-false)", HBPD[[1]], HBPDPer[[1]],
+                          "High BP (1-true)", HBPD[[2]],HBPDPer[[2]],
+                          "Diabetes (0-false)", DiabD[[1]], DiabDPer[[1]],
+                          "Diabetes (1-true)", DiabD[[2]], DiabDPer[[2]],
+                          "Smoke (0-false)", SmokeD[[1]], SmokeDPer[[1]],
+                          "Smoke (1-true)", SmokeD[[2]], SmokeDPer[[2]],
+                          "Sex (0-woman)", SexD[[1]], SexDPer[[1]],
+                          "Sex (1-man)", SexD[[2]], SexDPer[[2]])
+        
+        
+        
+        
+        
+        if (input$targetVar=="Full"){
+        catFF <- formatRound(datatable(catF,rownames=FALSE),columns=c(3),digits=2)
+        }
+        
+        else if (input$targetVar=="Survived")
+        {
+        catSuS <- formatRound(datatable(catSu,rownames=FALSE),columns=c(3),digits=2)
+        }
+        
+        else 
+        {
+        catDuD <- formatRound(datatable(catDu,rownames=FALSE),columns=c(3),digits=2)
+        }
+
 
 
     })
     
     # Barchart Figure Info
     output$FIGC <- renderPlotly({
-        varLIST <- dplyr::select(hfcrDATA, Anemia:Target)
+
+        AnemiaF <- table(varLIST2()$Anemia)
+        HBPF <- table(varLIST2()$HighBP)
+        DiabF <- table(varLIST2()$Diabetes)
+        SexF <- table(varLIST2()$Sex)
+        SmokeF <- table(varLIST2()$Smoke)
+        
+        AnemiaFPer <- table(varLIST2()$Anemia)/299*100
+        HBPFPer <- table(varLIST2()$HighBP)/299*100
+        DiabFPer <- table(varLIST2()$Diabetes)/299*100
+        SexFPer <- table(varLIST2()$Sex)/299*100
+        SmokeFPer <- table(varLIST2()$Smoke)/299*100
+        
+        AnemiaS <- table(varLIST3()$Anemia)
+        HBPS <- table(varLIST3()$HighBP)
+        DiabS <- table(varLIST3()$Diabetes)
+        SexS <- table(varLIST3()$Sex)
+        SmokeS <- table(varLIST3()$Smoke)
+        
+        AnemiaSPer <- table(varLIST3()$Anemia)/203*100
+        HBPSPer <- table(varLIST3()$HighBP)/203*100
+        DiabSPer <- table(varLIST3()$Diabetes)/203*100
+        SexSPer <- table(varLIST3()$Sex)/203*100
+        SmokeSPer <- table(varLIST3()$Smoke)/203*100
+        
+        AnemiaD <- table(varLIST4()$Anemia)
+        HBPD <- table(varLIST4()$HighBP)
+        DiabD <- table(varLIST4()$Diabetes)
+        SexD <- table(varLIST4()$Sex)
+        SmokeD <- table(varLIST4()$Smoke)
+        
+        AnemiaDPer <- table(varLIST4()$Anemia)/96*100
+        HBPDPer <- table(varLIST4()$HighBP)/96*100
+        DiabDPer <- table(varLIST4()$Diabetes)/96*100
+        SexDPer <- table(varLIST4()$Sex)/96*100
+        SmokeDPer <- table(varLIST4()$Smoke)/96*100
         
         if (input$targetVar == "Full")
         {
@@ -286,6 +392,34 @@ server <- function(input, output, session) {
         figF <- figF %>% layout(title = "Full Dataset", yaxis = list(title = 'Count'), barmode = 'group')
         
         figF
+        }
+        
+        else if (input$targetVar == "Survived")
+        {
+            xVARSS <- c("Anemia", "High BP", "Diabetes", "Smoke", "Sex")
+            ZerosS <- c(AnemiaS[[1]],HBPS[[1]],DiabS[[1]],SmokeS[[1]],SexS[[1]])
+            OnesS <- c(AnemiaS[[2]],HBPS[[2]],DiabS[[2]],SmokeS[[2]],SexS[[2]])
+            dataS <- tibble(xVARSS,ZerosS,OnesS)
+            
+            figS <- plot_ly(dataS, x = xVARSS, y = ZerosS, type = 'bar', name = '0')
+            figS <- figS %>% add_trace(y = ~OnesS, name = '1')
+            figS <- figS %>% layout(title = "Full Dataset", yaxis = list(title = 'Count'), barmode = 'group')
+            
+            figS
+        }
+        
+        else 
+        {
+            xVARSD <- c("Anemia", "High BP", "Diabetes", "Smoke", "Sex")
+            ZerosD <- c(AnemiaD[[1]],HBPD[[1]],DiabD[[1]],SmokeD[[1]],SexD[[1]])
+            OnesD <- c(AnemiaD[[2]],HBPD[[2]],DiabD[[2]],SmokeD[[2]],SexD[[2]])
+            dataD <- tibble(xVARSD,ZerosD,OnesD)
+            
+            figD <- plot_ly(dataD, x = xVARSD, y = ZerosD, type = 'bar', name = '0')
+            figD <- figD %>% add_trace(y = ~OnesD, name = '1')
+            figD <- figD %>% layout(title = "Full Dataset", yaxis = list(title = 'Count'), barmode = 'group')
+            
+            figD
         }
     })
     
