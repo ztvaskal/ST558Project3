@@ -486,10 +486,16 @@ server <- function(input, output, session) {
     })
     
     output$RFFIT2<- renderPrint({
+        fitRF <- reactive({train(Target ~ ., data = trainSet, method = "rf",
+                                 trControl = trCtrl1, preProcess = c("center", "scale"),
+                                 ntree = 500, tuneGrid = expand.grid(.mtry = mtry))})
         fitRF()$finalModel 
     })
     
     output$RFFIT3<- renderPrint({
+        fitRF <- reactive({train(Target ~ ., data = trainSet, method = "rf",
+                                 trControl = trCtrl1, preProcess = c("center", "scale"),
+                                 ntree = 500, tuneGrid = expand.grid(.mtry = mtry))})
         predRF <- predict(fitRF(), newdata = testSet)
         predRF_RMSE <- sqrt(mean((predRF - testSet$Target)^2))
         paste0("Predicted RMSE = ",predRF_RMSE)
