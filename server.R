@@ -45,7 +45,7 @@ varLISTX <- select(hfcrDATA, Age:Time)
 varLISTY <- select(hfcrDATA, Age:Time)
 
 # Objects in this file are shared across all sessions
-source('all_sessions.R', local=TRUE)
+source('all_sessions.R', local=FALSE)
     
 ## Server - Code here that can be reactive. Differs for every instance of your app that runs.
 server <- function(input, output, session) {
