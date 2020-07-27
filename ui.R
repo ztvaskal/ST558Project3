@@ -36,8 +36,7 @@ ui <- dashboardPage(skin = "yellow",
             menuItem("Scatter Plot", tabName = "scatter", icon = icon("line-chart")),
             menuItem("Clustering - Unsupervised", tabName = "cluster", icon = icon("object-group")),
             menuItem("Logisitic Regression - Supervised", tabName = "logreg", icon = icon("sitemap")),
-            menuItem("Classification Trees - Supervised", tabName = "classtree", icon = icon("tree")),
-            menuItem("Customized Predictions", tabName = "custompred", icon = icon("map-signs"))
+            menuItem("Random Forest - Supervised", tabName = "randomforest", icon = icon("tree"))
         )
     ),
     ## Body content
@@ -263,40 +262,55 @@ ui <- dashboardPage(skin = "yellow",
                     )
             ),
             
-            #CLASSTREE tab content
-            tabItem(tabName = "classtree",
+            #Random Forest tab content
+            tabItem(tabName = "randomforest",
                     fluidRow(
-                        box(width = 5
-                        ),
                         box(
-                            
-                        )
+                            width = 6,
+                            "Training Data Results:",
+                            verbatimTextOutput("RFFIT"),
+                            verbatimTextOutput("RFFIT2"),
+                            "Test Data Results:",
+                            verbatimTextOutput("RFFIT3")
+                            ),
+                        box(
+                            width = 6,
+                            tags$b("Please be patient, your defaults will also run your code in a few seconds."),
+                            tags$br(),tags$br(),
+                            "Now it's your turn to try. Your output will appear here. See below to select values.",
+                            tags$br(),tags$br(),
+                            "Training Data Results:",
+                            verbatimTextOutput("RFFIT4"),
+                            verbatimTextOutput("RFFIT5"),
+                            "Test Data Results:",
+                            verbatimTextOutput("RFFIT6")
+                            )
                     ),
                     fluidRow(
-                        box(width = 5
-                            
+                        box(
+                            width = 6,
+                            tags$b("Please be patient, this code may take a full minute to run."),
+                            tags$br(),tags$br(),
+                            "This random forest model uses 10-fold cross-validation (cv) and
+                            was trained on a set of values for mtry, shown above,
+                            the number of variables randomly sampled as candidates at each split, where the
+                            default values are different for classification and regression.  If there
+                            are p variables, the typical values are:",
+                            withMathJax(helpText("for classification: $$\\sqrt{p}$$")),
+                            withMathJax(helpText("& for regression: $$\\frac{p}{3}$$")),tags$br(),tags$br()
                         ),
                         box(
-                            
-                        )
-                    )
-            ),
-            
-            #CUSTOMPRED tab content
-            tabItem(tabName = "custompred",
-                    fluidRow(
-                        box(width = 5
-                        ),
-                        box(
-                            
-                        )
-                    ),
-                    fluidRow(
-                        box(width = 5
-                            
-                        ),
-                        box(
-                            
+                            width = 6,
+                            "Specify a numeric value for mtry between 1 and 12.",tags$br(),
+                            numericInput("mtrys","Specify mtry [1,12]: ", min = 1, max = 12,
+                                         value = 1, step = 0.001),
+                            "Specify the number of trees, ntree. Default for ntree in the R caret package is 500.
+                            Typical values vary depending on which source you consult.  Can be as small as 1
+                            and in some cases greater than 2000.  There is tradeoff between number of trees and
+                            efficiency. Having ntree values over 1000 may run slower depending on the speed of
+                            your processor. For this applet, you are capped at 2500.",tags$br(),
+                            numericInput("ntrees","Specify ntree [1,2500]: ", min = 1, max = 2500,
+                                         value = 1, step = 1)
                         )
                     )
             )

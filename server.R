@@ -468,12 +468,62 @@ server <- function(input, output, session) {
     
     
     
-    ## Classification Trees
-    output$GINIPLOT <- renderPlot({
+    ## Random Forest
+    
+    output$RFFIT<- renderPrint({
+        set.seed(1)
+        alpha     <- 0.7 # percentage of training set
+        inTrain   <- sample(1:nrow(hfcrDATA), alpha * nrow(hfcrDATA))
+        trainSet <- hfcrDATA[inTrain,]
+        testSet  <- hfcrDATA[-inTrain,]
         
+        mtry <- c(2,3,sqrt(dim(trainSet)[2]-1),4,5,6)
+        trCtrl1 <- trainControl(method = "cv", number = 10)
+        fitRF <- train(Target ~ ., data = trainSet, method = "rf",
+                       trControl = trCtrl1, preProcess = c("center", "scale"),
+                       ntree = 500, tuneGrid = expand.grid(.mtry = mtry))
+        fitRF
     })
     
+    output$RFFIT2<- renderPrint({
+        fitRF$finalModel 
+    })
     
+    output$RFFIT3<- renderPrint({
+        predRF <- predict(fitRF, newdata = testSet)
+        predRF_RMSE <- sqrt(mean((predRF - testSet$Target)^2))
+        paste0("Predicted RMSE = ",predRF_RMSE)
+    })
     
+    observe({input$mtrys})
+    observe({input$ntrees})
+
+    # User Results:
     
+    set.seed(1)
+    alpha1     <- 0.7 # percentage of training set
+    inTrain1   <- sample(1:nrow(hfcrDATA), alpha1 * nrow(hfcrDATA))
+    trainSet1  <- hfcrDATA[inTrain1,]
+    testSet1   <- hfcrDATA[-inTrain1,]
+    trCtrl2 <- trainControl(method = "cv", number = 10)
+    
+    mtry1  <- reactive({input$mtrys})
+    nt1    <- reactive({input$ntrees})
+    fitRF1 <- reactive({train(Target ~ ., data = trainSet1, method = "rf",
+                    trControl = trCtrl2, preProcess = c("center", "scale"),
+                    ntree = nt1(), tuneGrid = expand.grid(.mtry = mtry1()))})
+    
+    output$RFFIT4<- renderPrint({
+        fitRF1()
+    })
+    
+    output$RFFIT5<- renderPrint({
+        fitRF1()$finalModel 
+    })
+    
+    output$RFFIT6<- renderPrint({
+        predRF1 <- predict(fitRF1(), newdata = testSet1)
+        predRF1_RMSE <- sqrt(mean((predRF1 - testSet1$Target)^2))
+        paste0("Predicted RMSE = ",predRF1_RMSE)
+    })
 }
