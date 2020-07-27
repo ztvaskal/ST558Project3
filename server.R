@@ -114,6 +114,8 @@ server <- function(input, output, session) {
     fig2 <- reactive({filter(hfcrDATA, Target==1)})
     varLIST <- select(hfcrDATA, Age:Time)
     
+    observe({input$variable})
+    
     # Histogram Figure Info
     output$FIG <- renderPlotly({
         
