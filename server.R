@@ -14,6 +14,7 @@ library(dplyr)
 library(DT)
 library(psych)
 library(plotly)
+library(pipeR)
 
 ## Code here that you only need to evaluate once. This can include reading in data, 
 ## creation of functions common to all sessions, and reading of other common r scripts.
@@ -109,46 +110,47 @@ server <- function(input, output, session) {
     })
 
     # Prep for Plotly Histogram
-    fig1 <- filter(hfcrDATA, Target==0)
-    fig2 <- filter(hfcrDATA, Target==1)
+    fig1 <- reactive({filter(hfcrDATA, Target==0)})
+    fig2 <- reactive({filter(hfcrDATA, Target==1)})
+    varLIST <- select(hfcrDATA, Age:Time)
     
     # Histogram Figure Info
     output$FIG <- renderPlotly({
-        varLIST <- dplyr::select(hfcrDATA, Age:Time)
+        
         if (input$variable == "Age"){
             n <- 1
-            var1 <- fig1$Age
-            var2 <- fig2$Age
+            var1 <- fig1()$Age
+            var2 <- fig2()$Age
         }
         if (input$variable == "CPK"){
             n <- 2
-            var1 <- fig1$CPK
-            var2 <- fig2$CPK
+            var1 <- fig1()$CPK
+            var2 <- fig2()$CPK
         }
         if (input$variable == "EF"){
             n <- 3
-            var1 <- fig1$EF
-            var2 <- fig2$EF
+            var1 <- fig1()$EF
+            var2 <- fig2()$EF
         }
         if (input$variable == "Platelet"){
             n <- 4
-            var1 <- fig1$Platelet
-            var2 <- fig2$Platelet
+            var1 <- fig1()$Platelet
+            var2 <- fig2()$Platelet
         }
         if (input$variable == "SCr"){
             n <- 5
-            var1 <- fig1$SCr
-            var2 <- fig2$SCr
+            var1 <- fig1()$SCr
+            var2 <- fig2()$SCr
         }
         if (input$variable == "SNa"){
             n <- 6
-            var1 <- fig1$SNa
-            var2 <- fig2$SNa
+            var1 <- fig1()$SNa
+            var2 <- fig2()$SNa
         }
         if (input$variable == "Time"){
             n <- 7
-            var1 <- fig1$Time
-            var2 <- fig2$Time
+            var1 <- fig1()$Time
+            var2 <- fig2()$Time
         }
 
         x <- list(title = names(fig1)[n]) #replaced 1 with n
@@ -235,9 +237,8 @@ server <- function(input, output, session) {
     
     # TABLE 6 - Full Dataset Categorical
     output$TABLE6 <- DT::renderDataTable({
-        varLIST2 <- dplyr::select(hfcrDATA, Anemia:Target)
-        table(varLIST2$Anemia,varLIST2$Target)
         
+        varLIST2 <- dplyr::select(hfcrDATA, Anemia:Target)
         AnemiaF <- table(varLIST2$Anemia)
         HBPF <- table(varLIST2$HighBP)
         DiabF <- table(varLIST2$Diabetes)
@@ -264,9 +265,29 @@ server <- function(input, output, session) {
                          "Sex (1-man)", SexF[[2]], SexFPer[[2]])
         catFF <- formatRound(datatable(catF,rownames=FALSE),columns=c(3),digits=2)
         catFF
+        
+
+
     })
     
-    
+    # Barchart Figure Info
+    output$FIGC <- renderPlotly({
+        varLIST <- dplyr::select(hfcrDATA, Anemia:Target)
+        
+        if (input$targetVar == "Full")
+        {
+        xVARSF <- c("Anemia", "High BP", "Diabetes", "Smoke", "Sex")
+        ZerosF <- c(AnemiaF[[1]],HBPF[[1]],DiabF[[1]],SmokeF[[1]],SexF[[1]])
+        OnesF <- c(AnemiaF[[2]],HBPF[[2]],DiabF[[2]],SmokeF[[2]],SexF[[2]])
+        dataF <- tibble(xVARSF,ZerosF,OnesF)
+        
+        figF <- plot_ly(dataF, x = xVARSF, y = ZerosF, type = 'bar', name = '0')
+        figF <- figF %>% add_trace(y = ~OnesF, name = '1')
+        figF <- figF %>% layout(title = "Full Dataset", yaxis = list(title = 'Count'), barmode = 'group')
+        
+        figF
+        }
+    })
     
     
 }

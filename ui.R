@@ -15,6 +15,7 @@ library(dplyr)
 library(DT)
 library(psych)
 library(plotly)
+library(pipeR)
 
 
 ## UI ##
@@ -116,16 +117,17 @@ ui <- dashboardPage(skin = "yellow",
                         box(width = 5,title = "Categorical Data", solidHeader = TRUE,
                             DT::dataTableOutput("TABLE6")
                             ),
-                        box(width = 5,title = "Barchart", solidHeader = TRUE
+                        box(width = 5,title = "Barchart", solidHeader = TRUE,
+                            plotlyOutput(outputId = "FIGC")
+                        ),
+                        box(width = 5,
+                            selectInput("targetVar", "Dataset Type:",
+                                        choices = c("Full", "Survived", "Dead"),
+                                        selected = "Full")
+                            )
                         )
                     ),
-                    fluidRow(
-                        box(width = 5
-                        )
-                    )
-            ),
-                    
-            
+
             #DATA tab content
             tabItem(tabName = "data",
                     box(title = "Heart Failure Dataset", width = 13,
