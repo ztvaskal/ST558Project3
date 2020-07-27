@@ -49,7 +49,7 @@ source('all_sessions.R', local=FALSE)
     
 ## Server - Code here that can be reactive. Differs for every instance of your app that runs.
 server <- function(input, output, session) {
-    varLIST <<- select(hfcrDATA, Age:Time)
+    varLIST <- select(hfcrDATA,Age:Time)
     varLISTX <<- select(hfcrDATA, Age:Time)
     varLISTY <<- select(hfcrDATA, Age:Time)
     
@@ -123,7 +123,7 @@ server <- function(input, output, session) {
     
     # Histogram Figure Info
     output$FIG <- renderPlotly({
-        varLIST <- select(hfcrDATA, Age:Time)
+        varLIST <- select(hfcrDATA, !!!input$variable)
         if (input$variable == "Age"){
             n <- 1
             var1 <- fig1()$Age
@@ -440,8 +440,8 @@ server <- function(input, output, session) {
     
     # Scatterplot Figure Info
     output$SPLOT <- renderPlotly({
-        varLISTX <- select(hfcrDATA, Age:Time)
-        varLISTY <- select(hfcrDATA, Age:Time)
+        varLISTX <- select(hfcrDATA, !!!input$varX)
+        varLISTY <- select(hfcrDATA, !!!input$varY)
         
         if (input$varX == "Age"){vX <- vLX()$Age}
         if (input$varX == "CPK"){vX <- vLX()$CPK}
