@@ -469,34 +469,18 @@ server <- function(input, output, session) {
     
 
     ## Random Forest
-    set.seed(1)
-    alpha     <- 0.7 # percentage of training set
-    inTrain   <- sample(1:nrow(hfcrDATA), alpha * nrow(hfcrDATA))
-    trainSet <- hfcrDATA[inTrain,]
-    testSet  <- hfcrDATA[-inTrain,]
-    
-    mtry <- c(2,3,sqrt(dim(trainSet)[2]-1),4,5,6)
-    trCtrl1 <- trainControl(method = "cv", number = 10)
-    fitRF <- reactive({train(Target ~ ., data = trainSet, method = "rf",
-                   trControl = trCtrl1, preProcess = c("center", "scale"),
-                   ntree = 500, tuneGrid = expand.grid(.mtry = mtry))})
+
     
     output$RFFIT<- renderPrint({
-        fitRF()
+        fitRF
     })
     
     output$RFFIT2<- renderPrint({
-        fitRF <- reactive({train(Target ~ ., data = trainSet, method = "rf",
-                                 trControl = trCtrl1, preProcess = c("center", "scale"),
-                                 ntree = 500, tuneGrid = expand.grid(.mtry = mtry))})
-        fitRF()$finalModel 
+        fitRF$finalModel 
     })
     
     output$RFFIT3<- renderPrint({
-        fitRF <- reactive({train(Target ~ ., data = trainSet, method = "rf",
-                                 trControl = trCtrl1, preProcess = c("center", "scale"),
-                                 ntree = 500, tuneGrid = expand.grid(.mtry = mtry))})
-        predRF <- predict(fitRF(), newdata = testSet)
+        predRF <- predict(fitRF, newdata = testSet)
         predRF_RMSE <- sqrt(mean((predRF - testSet$Target)^2))
         paste0("Predicted RMSE = ",predRF_RMSE)
     })
