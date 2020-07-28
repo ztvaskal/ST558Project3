@@ -507,10 +507,10 @@ server <- function(input, output, session) {
         fitLogRegStep
     })
     output$LOGREGFITb<- renderPrint({
-        fitLogReg1$finalModel
+        fitLogRegStep$finalModel
     })
     output$LOGREGFITc<- renderPrint({
-        exp(coef(fitLogReg1$finalModel))
+        exp(coef(fitLogRegStep$finalModel))
     })
     output$LOGREGFITd<- renderPrint({
         fitLogRegFINAL$finalModel
