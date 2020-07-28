@@ -224,7 +224,16 @@ ui <- dashboardPage(skin = "yellow",
                         "This R Shiny dashboard investigates the heart failure dataset from UCI. The
                         dashboard overall has several tabs located on the left hand side which are
                         presented in a logical order from top to bottom.  After the dashboard and the
-                        information tabs, you will find several other tabs, namely, "
+                        information tabs, you will find several other tabs, which we will discuss below.
+                        The data tab houses information about the 13 variables in the dataset as well as
+                        a datatable of the full dataset.  The next two tabs are data exploration tabs,
+                        which are dynamic to user input to create a dual overlayed histogram based on
+                        several of the numeric variables, as well as bar graph to explore the categorical
+                        variables.  The next tab is a scatterplot to again explore relationships between
+                        the 7 numeric variables.  The tab that follows is an unsupervised clustering tab
+                        that showcases a dendrogram heatmap. The plot is made similar to plotly and you
+                        can really zoom in and investigate areas of interest.  The final two tabs are
+                        the supervised learning modeling tabs, namely random forests and logistic regression."
                     )
             ),
             
