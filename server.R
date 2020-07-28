@@ -19,6 +19,7 @@ library(heatmaply)
 library(dendextend)
 library(tree)
 library(caret)
+library(MASS)
 
 ## Code here that you only need to evaluate once. This can include reading in data, 
 ## creation of functions common to all sessions, and reading of other common r scripts.
@@ -454,23 +455,7 @@ server <- function(input, output, session) {
         
     })
     
-    ## Logistic Regression
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
     ## Random Forest
-
-    
     output$RFFIT<- renderPrint({
         fitRF
     })
@@ -516,4 +501,33 @@ server <- function(input, output, session) {
         predRF1_RMSE <- sqrt(mean((predRF1 - testSet1$Target)^2))
         paste0("Predicted RMSE = ",predRF1_RMSE)
     })
+    
+    ## Logistic Regression
+    output$LOGREGFITa<- renderPrint({
+        fitLogRegStep
+    })
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }

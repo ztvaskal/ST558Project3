@@ -20,6 +20,7 @@ library(heatmaply)
 library(dendextend)
 library(tree)
 library(caret)
+library(MASS)
 
 
 ## UI ##
@@ -36,8 +37,8 @@ ui <- dashboardPage(skin = "yellow",
             menuItem("Data Exploration - Categorical Variables", tabName = "explore2", icon = icon("bar-chart")),
             menuItem("Scatter Plot", tabName = "scatter", icon = icon("line-chart")),
             menuItem("Clustering - Unsupervised", tabName = "cluster", icon = icon("object-group")),
-            menuItem("Logisitic Regression - Supervised", tabName = "logreg", icon = icon("sitemap")),
-            menuItem("Random Forest - Supervised", tabName = "randomforest", icon = icon("tree"))
+            menuItem("Random Forest - Supervised", tabName = "randomforest", icon = icon("tree")),
+            menuItem("Logisitic Regression - Supervised", tabName = "logreg", icon = icon("sitemap"))
         )
     ),
     ## Body content
@@ -215,7 +216,7 @@ ui <- dashboardPage(skin = "yellow",
                         diabetes (0-false, 1-true)."
                     ),
                     box(
-                        title = "App Abilities", width = 6, background = "purple",
+                        title = "App Abilities", width = 6, background = "green",
                         "A box with a solid white background"
                     )
             ),
@@ -247,7 +248,13 @@ ui <- dashboardPage(skin = "yellow",
             #LOGREG tab content
             tabItem(tabName = "logreg",
                     fluidRow(
-                        box(width = 5
+                        box(
+                            width = 5,
+                            "Logistic Regression is perfect to handle this scenario, where outcome trying to
+                            predict is survived or death.  First we use the MASS package to run a forward
+                            stepwise logistic regression, using method = glmStepAIC.  This finds the combination
+                            of variables that minimizes the AIC score.",
+                            verbatimTextOutput("LOGREGFITa")
                         ),
                         box(
                             
