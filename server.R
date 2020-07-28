@@ -525,10 +525,31 @@ server <- function(input, output, session) {
         confusionMatrix(xtab)
     })
     
+    observe({input$x1})
+    observe({input$x2})
+    observe({input$x3})
+    observe({input$x4})
+    observe({input$x5})
+    
+    outcome <- "Target"
+    x_1  <- reactive({input$x1})
+    x_2  <- reactive({input$x2})
+    x_3  <- reactive({input$x3})
+    x_4  <- reactive({input$x4})
+    x_5  <- reactive({input$x5})
+    
+    variables <- reactive({c(x_1(), x_2(), x_3(), x_4(), x_5())})
+    f <- reactive({as.formula(paste(outcome,paste(variables(), collapse = " + "),sep = " ~ "))})
+
+    ctrl1 <- trainControl(method = "repeatedcv", number = 10, savePredictions = TRUE)
+    fitLogRegFINAL1 <- reactive({train(f(), data = trainSet1,
+                            method = "glm", family = "binomial", trControl = ctrl1, tuneLength = 5)})
     
     # User Results:
     
-    
+    output$LRFITUSERa<- renderPrint({
+        fitLogRegFINAL1()
+    })
     
     
     

@@ -80,7 +80,7 @@ ui <- dashboardPage(skin = "yellow",
                             span(tags$b("Please be patient when app starts. Code runs at startup to improve
                                         speed when viewing tabs. In total it takes less than 1 minute. You will
                                         know it is completed when you see the UCI LOGO. Thank you!"),
-                                 style = "color:red")
+                                 style = "color:yellow")
                             
                         )
                     )
@@ -221,7 +221,10 @@ ui <- dashboardPage(skin = "yellow",
                     ),
                     box(
                         title = "App Abilities", width = 6, background = "green",
-                        "A box with a solid white background"
+                        "This R Shiny dashboard investigates the heart failure dataset from UCI. The
+                        dashboard overall has several tabs located on the left hand side which are
+                        presented in a logical order from top to bottom.  After the dashboard and the
+                        information tabs, you will find several other tabs, namely, "
                     )
             ),
             
@@ -274,7 +277,33 @@ ui <- dashboardPage(skin = "yellow",
                             verbatimTextOutput("LOGREGFITg")
                             ),
                         box(
-                            width = 6
+                            width = 6,
+                            "Now it's your turn to try.  To keep it fair, you can also have five variables
+                            in your model.  If you only want 3 for instance, keep the last two variables, x4 and x5
+                            as duplicates of one of the variables in your model.  If you only want one variable,
+                            for instance, Age, then each of the choices below should be Age.",tags$br(),
+                            selectInput("x1", "x1:",
+                                        choices = c("Age","CPK","EF","Platelet","SCr","SNa","Time", "Anemia",
+                                                    "Diabetes", "HighBP", "Smoke", "Sex"),
+                                        selected = "Age"),
+                            selectInput("x2", "x2:",
+                                        choices = c("Age","CPK","EF","Platelet","SCr","SNa","Time", "Anemia",
+                                                    "Diabetes", "HighBP", "Smoke", "Sex"),
+                                        selected = "EF"),
+                            selectInput("x3", "x3:",
+                                        choices = c("Age","CPK","EF","Platelet","SCr","SNa","Time", "Anemia",
+                                                    "Diabetes", "HighBP", "Smoke", "Sex"),
+                                        selected = "SCr"),
+                            selectInput("x4", "x4:",
+                                        choices = c("Age","CPK","EF","Platelet","SCr","SNa","Time", "Anemia",
+                                                    "Diabetes", "HighBP", "Smoke", "Sex"),
+                                        selected = "SNa"),
+                            selectInput("x5", "x5:",
+                                        choices = c("Age","CPK","EF","Platelet","SCr","SNa","Time", "Anemia",
+                                                    "Diabetes", "HighBP", "Smoke", "Sex"),
+                                        selected = "Time"),
+                            "Training Data Results",tags$br(),
+                            verbatimTextOutput("output$LRFITUSERa")
                             )
                     )
             ),
