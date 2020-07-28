@@ -78,7 +78,9 @@ ui <- dashboardPage(skin = "yellow",
                             Informatics and Decision Making 20, 16 (2020)."),
                             span(uiOutput("UCI_ARTICLE"), style = "color:red"),tags$br(),
                             span(tags$b("Please be patient when app starts. Code runs at startup to improve
-                                        speed when viewing tabs. Thank you!"), style = "color:red")
+                                        speed when viewing tabs. In total it takes less than 1 minute. You will
+                                        know it is completed when you see the UCI LOGO. Thank you!"),
+                                 style = "color:red")
                             
                         )
                     )
