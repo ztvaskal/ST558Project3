@@ -426,7 +426,7 @@ server <- function(input, output, session) {
         if (input$varY == "SNa"){vY <- vLY()$SNa}
         if (input$varY == "Time"){vY <- vLY()$Time}
         
-        varLISTP <- select(hfcrDATA, Age:Time,Target)
+        varLISTP <- dplyr::select(hfcrDATA, Age:Time,Target)
         varLISTP$TargetC <- ifelse((varLISTP$Target==0),"Survived","Dead")
         scatrPlot <- plot_ly(data = varLISTP, type = "scatter",x = vX, y = vY,
                              color = ~TargetC, colors = "Set1", mode = "markers")
@@ -506,11 +506,24 @@ server <- function(input, output, session) {
     output$LOGREGFITa<- renderPrint({
         fitLogRegStep
     })
-    
-    
-    
-    
-    
+    output$LOGREGFITb<- renderPrint({
+        fitLogReg1$finalModel
+    })
+    output$LOGREGFITc<- renderPrint({
+        exp(coef(fitLogReg1$finalModel))
+    })
+    output$LOGREGFITd<- renderPrint({
+        fitLogRegFINAL$finalModel
+    })
+    output$LOGREGFITe<- renderPrint({
+        fitLogRegFINAL$finalModel
+    })
+    output$LOGREGFITf<- renderPrint({
+        exp(coef(fitLogRegFINAL$finalModel))
+    })
+    output$LOGREGFITg<- renderPrint({
+        confusionMatrix(xtab)
+    })
     
     
     

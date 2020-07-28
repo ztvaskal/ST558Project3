@@ -76,7 +76,9 @@ ui <- dashboardPage(skin = "yellow",
                             "Davide Chicco, Giuseppe Jurman: Machine learning can predict survival of patients
                             with heart failure from serum creatinine and ejection fraction alone.",tags$i("BMC Medical 
                             Informatics and Decision Making 20, 16 (2020)."),
-                            span(uiOutput("UCI_ARTICLE"), style = "color:red"),tags$br()
+                            span(uiOutput("UCI_ARTICLE"), style = "color:red"),tags$br(),
+                            span(tags$b("Please be patient when app starts. Code runs at startup to improve
+                                        speed when viewing tabs. Thank you!"), style = "color:red")
                             
                         )
                     )
@@ -249,24 +251,29 @@ ui <- dashboardPage(skin = "yellow",
             tabItem(tabName = "logreg",
                     fluidRow(
                         box(
-                            width = 5,
+                            width = 6,
                             "Logistic Regression is perfect to handle this scenario, where outcome trying to
                             predict is survived or death.  First we use the MASS package to run a forward
                             stepwise logistic regression, using method = glmStepAIC.  This finds the combination
                             of variables that minimizes the AIC score.",
-                            verbatimTextOutput("LOGREGFITa")
-                        ),
+                            "Training Data Results:",tags$br(),
+                            verbatimTextOutput("LOGREGFITa"),
+                            verbatimTextOutput("LOGREGFITb"),
+                            verbatimTextOutput("LOGREGFITc"),
+                            "So here we see there are 5 variables in the model with the lowest AIC score.
+                            Now we can construct a model for training and testing using these 5 variables.
+                            We are using repeated 10-fold CV for this process. Let's examine the similar
+                            output to the above model with the addition of the confusion
+                            matrix to see how well our model did.",tags$br(),
+                            "Test Data Results:",
+                            verbatimTextOutput("LOGREGFITd"),
+                            verbatimTextOutput("LOGREGFITe"),
+                            verbatimTextOutput("LOGREGFITf"),
+                            verbatimTextOutput("LOGREGFITg")
+                            ),
                         box(
-                            
-                        )
-                    ),
-                    fluidRow(
-                        box(width = 5
-
-                        ),
-                        box(
-                            
-                        )
+                            width = 6
+                            )
                     )
             ),
             
@@ -275,10 +282,10 @@ ui <- dashboardPage(skin = "yellow",
                     fluidRow(
                         box(
                             width = 6,
-                            "Training Data Results:",
+                            "Training Data Results:",tags$br(),
                             verbatimTextOutput("RFFIT"),
                             verbatimTextOutput("RFFIT2"),
-                            "Test Data Results:",
+                            "Test Data Results:",tags$br(),
                             verbatimTextOutput("RFFIT3")
                             ),
                         box(
